@@ -1,49 +1,61 @@
-import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { LockOutlined } from "@mui/icons-material";
+import Grid from "@mui/material/Grid2";
+import { Avatar, Box, Button, Container, Paper, TextField, Typography } from "@mui/material";
 
+const LoginScreen = () => {
 
-const LoginScreen = (props) => {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [emailError, setEmailError] = useState('')
-  const [passwordError, setPasswordError] = useState('')
-
-  const navigate = useNavigate()
-
-  const onButtonClick = () => {
-    // You'll update this function later...
-  }
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    // Lógica para iniciar sesión
+  };
 
   return (
-    <div className={'mainContainer'}>
-      <div className={'titleContainer'}>
-        <div>Login</div>
-      </div>
-      <br />
-      <div className={'inputContainer'}>
-        <input
-          value={email}
-          placeholder="Enter your email here"
-          onChange={(ev) => setEmail(ev.target.value)}
-          className={'inputBox'}
-        />
-        <label className="errorLabel">{emailError}</label>
-      </div>
-      <br />
-      <div className={'inputContainer'}>
-        <input
-          value={password}
-          placeholder="Enter your password here"
-          onChange={(ev) => setPassword(ev.target.value)}
-          className={'inputBox'}
-        />
-        <label className="errorLabel">{passwordError}</label>
-      </div>
-      <br />
-      <div className={'inputContainer'}>
-        <input className={'inputButton'} type="button" onClick={onButtonClick} value={'Log in'} />
-      </div>
-    </div>
+    <Container maxWidth="xs">
+      <Paper elevation={10} sx={{ marginTop: 8, padding: 2}}>
+        <Avatar
+          sx={{
+            mx: "auto",
+            bgcolor: "secondary.main",
+            textAlign: "center",
+            mb: 1,
+          }}
+        >
+          <LockOutlined />
+        </Avatar>
+        <Typography component="h1" variant="h5" sx={{textAlign:"center"}}>
+          Log In
+        </Typography>
+        <Box
+          component="form"
+          onSubmit={handleSubmit}
+          noValidate
+          sx={{ mt: 1 }}
+        >
+          <TextField
+            placeholder="Correo electrónico"
+            fullWidth
+            required
+            autoFocus
+            sx={{ mb: 2 }}
+          />
+                    <TextField
+            placeholder="Contraseña"
+            fullWidth
+            required
+            sx={{ mb: 2 }}
+            type="password"
+          />
+          <Button type="submit" fullWidth variant="contained" sx={{ mt: 2 }}>
+            Log In
+          </Button>
+        </Box>
+          <Grid container justifyContent="center" sx={{ mt: 1 }}>
+            <Grid>
+              <Button color="primary" >Sign Up</Button>
+            </Grid>
+          </Grid>
+      </Paper>
+    </Container>
   );
 };
 

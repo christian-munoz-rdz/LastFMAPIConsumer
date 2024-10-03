@@ -117,20 +117,43 @@ const playlists = [
             },
         ],
     },
+    {
+        id: 6,
+        name: "Playlist 5",
+        description: "This is a beautiful playlist since I heard it I can't stop listening to it",
+        rating: 5,
+        tracks: [
+            {
+                id: 1,
+                name: "Track 1",
+                duration: "3:00",
+            },
+            {
+                id: 2,
+                name: "Track 2",
+                duration: "3:00",
+            },
+            {
+                id: 3,
+                name: "Track 3",
+                duration: "3:00",
+            },
+        ], 
+    }
 ]
 
 const ListsScreen = () => {
     return (
-        <div>
+        <>
             <Typography variant="h4">Playlists</Typography>
             <Box sx={{ flexGrow: 1, marginLeft: 3, marginRight: 3 }}>
             <Grid
           container
           spacing={{ xs: 2, md: 3 }}
-          columns={{ xs: 4, sm: 8, md: 16 }}
+          columns={{ xs: 4, sm: 10, md: 16 }}
         >
             {playlists.map((playlist) => (
-          <div key={playlist.id} style={{ marginBottom: '20px' }}>
+          <div key={playlist.id} style={{ marginBottom: '10px' }}>
               <Card>
             <CardActionArea>
             <CardContent>
@@ -153,7 +176,7 @@ const ListsScreen = () => {
             ))}
                         </Grid>
             </Box>
-        </div>
+        </>
     );
 }
 

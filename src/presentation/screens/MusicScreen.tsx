@@ -74,13 +74,14 @@ const MusicScreen = () => {
       <Box sx={{ flexGrow: 1, marginLeft: 3, marginRight: 3, marginBottom: 3 }}>
         <Grid
           container
-          spacing={{ xs: 2, md: 3 }}
+          spacing={{ xs: 2, md: 3, xl: 4 }}
           columns={{ xs: 4, sm: 8, md: 16 }}
         >
           {musicList.map((track, index) => (
-            <Grid key={index} size={{ xs: 2, sm: 4, md: 4 }}>
+            <Grid key={index} size={{ xs: 2, sm: 4, md: 4, xl:2 }}>
               <Grow in={true}>
                 <Card
+                
                   sx={{ width: "100%" }}
                 >
                     <CardMedia
@@ -105,8 +106,8 @@ const MusicScreen = () => {
                       </Typography>
                     </CardContent>
                   <CardActions>
-                    <Button size="small" onClick={handleOpen}>Añadir a Lista</Button>
-                    <Button size="small" onClick={() =>navigate(`/${track.artist.name}/${track.name}`)
+                    <Button size="medium" onClick={handleOpen}>Añadir a Lista</Button>
+                    <Button size="medium" onClick={() =>navigate(`/${track.artist.name}/${track.name}`)
                   }>Reseñar</Button>
                   </CardActions>
                 </Card>

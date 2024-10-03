@@ -2,6 +2,7 @@ import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import CustomList from './CustomList';
+import { Button } from '@mui/material';
 
 const playlists = [
   {
@@ -152,6 +153,7 @@ const CustomModal = ({open , handleClose}: CustomModalProps) => {
             Añadir a playlist
           </Typography>
           <CustomList/>
+            <Button onClick={handleClose}>Añadir a Listas</Button>
         </Box>
       </Modal>
     );
