@@ -6,10 +6,25 @@ import ListsScreen from "./presentation/screens/ListsScreen";
 import ProfileScreen from "./presentation/screens/ProfileScreen";
 import TrackPage from "./presentation/screens/TrackPage";
 import LoginScreen from "./presentation/screens/auth/LoginScreen";
+import { AuthContext } from "./context/auth-context";
+import { useCallback, useState } from "react";
 
 const App = () => {
+
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  const login = useCallback(() => {
+    setIsLoggedIn(true);
+  }, []);
+
+  const logout = useCallback(() => {
+    setIsLoggedIn(false);
+  }, []);
+
   return (
-    <>
+    <AuthContext.Provider
+      value={{ isLoggedIn: isLoggedIn, login: login, logout: logout }}
+    >
       <Nav />
       <Routes>
         <Route path="/" element={<MusicScreen />} />
@@ -19,7 +34,7 @@ const App = () => {
         <Route path="/profile" element={<ProfileScreen />} />
         <Route path="/:artist/:track" element={<TrackPage/>} />
       </Routes>
-    </>
+      </AuthContext.Provider>
   );
 };
 

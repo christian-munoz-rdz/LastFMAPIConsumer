@@ -1,10 +1,11 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getTrackInfo } from "../../services/tracks/getTrackInfo";
 import { Track } from "../../domain/entities/trackInfo";
 import { Box, Container } from "@mui/system";
 import { Card, CardContent, Typography, Button } from "@mui/material";
 import Reviews from "./Reviews";
+import { AuthContext } from "../../context/auth-context";
 
 const TrackPage = () => {
 
@@ -19,6 +20,8 @@ const TrackPage = () => {
     rating: ""
   })
 
+  const auth = useContext(AuthContext);
+  console.log(auth);
 
   useEffect(() => {
     const fetchData = async () => {
