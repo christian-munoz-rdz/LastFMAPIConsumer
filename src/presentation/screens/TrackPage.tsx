@@ -3,13 +3,22 @@ import { useParams } from "react-router-dom";
 import { getTrackInfo } from "../../services/tracks/getTrackInfo";
 import { Track } from "../../domain/entities/trackInfo";
 import { Box, Container } from "@mui/system";
-import { Card, CardMedia, CardContent, Typography, CardActions, Button } from "@mui/material";
+import { Card, CardContent, Typography, Button } from "@mui/material";
+import Reviews from "./Reviews";
 
 const TrackPage = () => {
+
   const { artist, track } = useParams<{ artist: string; track: string }>();
   const [pageTrack, setPageTrack] = useState<Track | null>(null);
+
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+
+  const [formData, setFormData] = useState({
+    comment : "",
+    rating: ""
+  })
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -26,67 +35,101 @@ const TrackPage = () => {
     fetchData();
   }, []);
 
+  const handleChange = (e ) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // Handle form submission
+    Reviews.push({id: Reviews.length(), name: "John Doe", ...formData})
+  };
+
   return (
-    <Container 
-    sx={{
-      minHeight: '100vh', // Para que ocupe todo el alto de la ventana
-      display: 'flex',
-      flexDirection: 'column',
-      justifyContent: 'center',
-      
-      backgroundColor: '#121212', // Un color de fondo oscuro para mejor contraste
-    }}
+    <Container
+      sx={{
+        minHeight: "100vh", // Para que ocupe todo el alto de la ventana
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+
+        backgroundColor: "#121212", // Un color de fondo oscuro para mejor contraste
+      }}
     >
-      <Box sx={{ width: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center',  }}>
-        <Card sx={{ maxWidth: '100%', height: '100%',padding: 1,}}>
+      <Box
+        sx={{
+          width: "100%",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+        }}
+      >
+        <Card sx={{ maxWidth: "100%", height: "100%", padding: 1 }}>
           <CardContent>
-            <img src={pageTrack?.album.image[3]["#text"]} alt={pageTrack?.album.title} />
+            <img
+              src={pageTrack?.album.image[3]["#text"]}
+              alt={pageTrack?.album.title}
+            />
             <Typography gutterBottom variant="h2" component="div">
-                {pageTrack?.name}
+              {pageTrack?.name}
             </Typography>
             <Typography variant="h3" color="text.secondary">
-                {pageTrack?.artist.name}
+              {pageTrack?.artist.name}
             </Typography>
             <Typography variant="h4" color="text.secondary">
-                Album: {pageTrack?.album.title}
+              Album: {pageTrack?.album.title}
             </Typography>
             <Typography variant="h5" color="text.secondary">
-                {Number(pageTrack?.playcount).toLocaleString()} reproducciones
+              {Number(pageTrack?.playcount).toLocaleString()} reproducciones
             </Typography>
             <Typography variant="h6" color="text.secondary">
-                Tags: {pageTrack?.toptags.tag.map((tag) => tag.name).join(", ")}
+              Tags: {pageTrack?.toptags.tag.map((tag) => tag.name).join(", ")}
             </Typography>
             <Typography variant="body2" sx={{ color: "text.secondary" }}>
-                {pageTrack?.wiki.summary}
+              {pageTrack?.wiki.summary}
             </Typography>
           </CardContent>
         </Card>
       </Box>
-    <Box sx={{ mt: 4 }}>
+      <Box sx={{ mt: 4 }}>
         <Typography variant="h5" gutterBottom>
-            Deja una reseña
+          Deja una reseña
         </Typography>
-        <form>
-            <Box sx={{ mb: 2 }}>
-                <Typography variant="body1">Comentario:</Typography>
-                <textarea name="comment" required rows={4} style={{ width: '100%', padding: '8px', marginBottom: '8px' }} />
-            </Box>
-            <Box sx={{ mb: 2 }}>
-                <Typography variant="body1">Calificación:</Typography>
-                <select name="rating" required style={{ width: '100%', padding: '8px', marginBottom: '8px' }}>
-                    <option value="">Selecciona una calificación</option>
-                    <option value="1">1 - Muy malo</option>
-                    <option value="2">2 - Malo</option>
-                    <option value="3">3 - Regular</option>
-                    <option value="4">4 - Bueno</option>
-                    <option value="5">5 - Excelente</option>
-                </select>
-            </Box>
-            <Button type="submit" variant="contained" color="primary">
-                Enviar
-            </Button>
+        <form onSubmit={handleSubmit}>
+          <Box sx={{ mb: 2 }}>
+            <Typography variant="body1">Comentario:</Typography>
+            <textarea
+              name="comment"
+              required
+              rows={4}
+              style={{ width: "100%", padding: "8px", marginBottom: "8px" }}
+              value={formData.comment}
+              onChange = {handleChange}
+            />
+          </Box>
+          <Box sx={{ mb: 2 }}>
+            <Typography variant="body1">Calificación:</Typography>
+            <select
+              name="rating"
+              required
+              style={{ width: "100%", padding: "8px", marginBottom: "8px" }}
+              value={formData.rating}
+              onChange={handleChange}
+            >
+              <option value="">Selecciona una calificación</option>
+              <option value="1">1 - Muy malo</option>
+              <option value="2">2 - Malo</option>
+              <option value="3">3 - Regular</option>
+              <option value="4">4 - Bueno</option>
+              <option value="5">5 - Excelente</option>
+            </select>
+          </Box>
+          <Button type="submit" variant="contained" color="primary">
+            Enviar
+          </Button>
         </form>
-    </Box>
+      </Box>
     </Container>
   );
 };

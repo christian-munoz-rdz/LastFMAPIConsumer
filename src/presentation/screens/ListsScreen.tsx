@@ -1,7 +1,7 @@
-import { Box, Card, CardContent, Typography } from "@mui/material"
+import { Box, Card, CardActionArea, CardContent, Typography } from "@mui/material"
 import Grid from "@mui/material/Grid2";
 
-let playlists = [
+const playlists = [
     {
         id: 1,
         name: "Playlist 1",
@@ -132,6 +132,7 @@ const ListsScreen = () => {
             {playlists.map((playlist) => (
           <div key={playlist.id} style={{ marginBottom: '20px' }}>
               <Card>
+            <CardActionArea>
             <CardContent>
                 <Typography variant="h6">{playlist.name}</Typography>
                 <Typography variant="body1">{playlist.description}</Typography>
@@ -146,6 +147,7 @@ const ListsScreen = () => {
               </Card>
                 ))}
             </CardContent>
+            </CardActionArea>
               </Card>
           </div>
             ))}
