@@ -21,7 +21,6 @@ import { getTrackInfo } from "../../services/tracks/getTrackInfo";
 const ProfileScreen = () => {
   const { currentUser } = useContext(AuthContext);
   const [user, setUser] = useState<User | null>(null);
-  const [FavList, setFavList] = useState<Track[]>([]);
   const [images, setImages] = useState<string[]>([]);
 
   useEffect(() => {
@@ -29,21 +28,18 @@ const ProfileScreen = () => {
     const fetchData = async () => {
       try {
         const { user } = await getUserData(currentUser);
-        console.log(user);
+
         setUser(user);
-        setFavList(user.favSongs);
         
         const tempImages: string[] = [];
 
-        for (const song of FavList) {
+        for (const song of user.favSongs) {
           const trackInfo = await getTrackInfo(song.songName, song.artist);
           const imageUrl = trackInfo.album.image[3]["#text"];
-          console.log(imageUrl);
           tempImages.push(imageUrl); // Agregar la URL de la imagen al array temporal
         }
 
         setImages(tempImages); // Actualizar el estado de las imágenes
-        console.log(FavList);
       } catch (error) {
         console.error(error);
       }
@@ -94,17 +90,17 @@ const ProfileScreen = () => {
       >
         Editar Descripcion
       </Button>
-      <Box sx={{ mt: 4, width: "100%" }}>
+      <Box sx={{ flexGrow: 1, marginLeft: 3, marginRight: 3, marginBottom: 3 }}>
         <Typography variant="h4" sx={{ mb: 2 }}>
           Canciones Favoritas
         </Typography>
         <Grid 
           container
-          spacing={{ xs: 2, md: 3 }}
+          spacing={{ xs: 2, md: 3, xl: 4 }}
           columns={{ xs: 4, sm: 8, md: 16 }}
         >
-          {FavList.map((song, index) => (
-            <Grid key={index} size={{ xs: 2, sm: 4, md: 4 }}>
+          {user?.favSongs.map((song, index) => (
+            <Grid key={index} size={{ xs: 2, sm: 4, md: 4, xl:2 }}>
               <Card sx={{ width: "100%" }}>
                 <CardMedia
                   component="img"

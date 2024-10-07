@@ -72,14 +72,14 @@ const ReviewsScreen = () => {
       >
         Reviews
       </Typography>
-      <Box sx={{ flexGrow: 1, marginLeft: 3, marginRight: 3 }}>
+      <Box sx={{ flexGrow: 1, marginLeft: 3, marginRight: 3, marginBottom: 3 }}>
         <Grid
           container
-          spacing={{ xs: 2, md: 3 }}
+          spacing={{ xs: 2, md: 3, xl: 4 }}
           columns={{ xs: 4, sm: 8, md: 16 }}
         >
           {Reviews.map((review, index) => (
-            <Grid key={index} size={{ xs: 2, sm: 4, md: 4 }}>
+            <Grid key={index} size={{ xs: 2, sm: 4, md: 4, xl:2 }}>
               <Card sx={{ width: "100%" }}>
                 <CardMedia
                   component="img"

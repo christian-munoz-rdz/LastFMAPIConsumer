@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useState, useEffect } from "react";
 import { Routes, Route, useNavigate } from "react-router-dom";
 
 import Nav from "./presentation/components/NavBar/Nav";
@@ -11,9 +11,29 @@ import LoginScreen from "./presentation/screens/auth/LoginScreen";
 import { AuthContext } from "./context/auth-context";
 
 const App = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate();
-  const [userId, setUserId] = useState<number | null>(null);
+
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(() => {
+    return localStorage.getItem("isLoggedIn") === "true";
+  });
+
+
+  const [userId, setUserId] = useState<number | null>(() => {
+    const storedUserId = localStorage.getItem("userId");
+    return storedUserId ? parseInt(storedUserId, 10) : null;
+  });
+
+  useEffect(() => {
+    localStorage.setItem("isLoggedIn", String(isLoggedIn));
+  }, [isLoggedIn]);
+
+  useEffect(() => {
+    if (userId !== null) {
+      localStorage.setItem("userId", String(userId));
+    } else {
+      localStorage.removeItem("userId");
+    }
+  }, [userId]);
 
   const handleUser = useCallback((userId: number) => {
     setUserId(userId);
@@ -26,6 +46,7 @@ const App = () => {
 
   const logout = useCallback(() => {
     setIsLoggedIn(false);
+    setUserId(null);
     navigate("/");
   }, [navigate]);
 
