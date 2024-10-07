@@ -5,7 +5,9 @@ import restClient from "../resClient";
 
 export const getPlaylists = async (userId: number) => {
     try {
-        const response = await restClient.get(`/playlists/${userId}`);
+        const response = await restClient.post('/playlists/', {
+            userId
+        });
         return response.data;
     } catch (error) {
         throw new Error(error.response.data.message);
