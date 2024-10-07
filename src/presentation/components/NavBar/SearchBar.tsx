@@ -2,6 +2,7 @@ import { InputBase } from "@mui/material";
 import { alpha, styled } from "@mui/material/styles";
 import SearchIcon from '@mui/icons-material/Search';
 
+// * Estilizador de contenedor de barra de busqueda
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
   borderRadius: theme.shape.borderRadius,
@@ -18,6 +19,7 @@ const Search = styled('div')(({ theme }) => ({
   },
 }));
 
+//* Contenedr del Icono de busqueda
 const SearchIconWrapper = styled('div')(({ theme }) => ({
   padding: theme.spacing(0, 2),
   height: '100%',
@@ -28,6 +30,7 @@ const SearchIconWrapper = styled('div')(({ theme }) => ({
   justifyContent: 'center',
 }));
 
+//* Contenedor de Input de busqueda
 const StyledInputBase = styled(InputBase)(({ theme }) => ({
   color: 'inherit',
   '& .MuiInputBase-input': {
@@ -49,7 +52,7 @@ const SearchBar = () => {
       <SearchIcon />
     </SearchIconWrapper>
     <StyledInputBase
-      placeholder="Search…"
+      placeholder="Buscar"
       inputProps={{ 'aria-label': 'search' }}
     />
   </Search>

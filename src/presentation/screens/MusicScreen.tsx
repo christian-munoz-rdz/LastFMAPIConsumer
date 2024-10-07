@@ -27,7 +27,7 @@ const MusicScreen = () => {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-  const navigate = useNavigate();
+  const navigation = useNavigate();
 
   const numberOfItems = 100;
 
@@ -107,7 +107,7 @@ const MusicScreen = () => {
                     </CardContent>
                   <CardActions>
                     <Button size="medium" onClick={handleOpen}>Añadir a Lista</Button>
-                    <Button size="medium" onClick={() =>navigate(`/${track.artist.name}/${track.name}`)
+                    <Button size="medium" onClick={() =>navigation(`/${track.artist.name}/${track.name}`)
                   }>Reseñar</Button>
                   </CardActions>
                 </Card>

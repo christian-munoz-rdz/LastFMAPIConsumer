@@ -3,8 +3,10 @@ import { useParams } from "react-router-dom";
 import { getTrackInfo } from "../../services/tracks/getTrackInfo";
 import { Track } from "../../domain/entities/trackInfo";
 import { Box, Container } from "@mui/system";
-import { Card, CardContent, Typography, Button } from "@mui/material";
+import { Card, CardContent, Typography, Button, CircularProgress } from "@mui/material";
+import { addSongToFav } from "../../services/rest/users/usersApi";
 import Reviews from "./Reviews";
+import { Song } from "../../domain/models/song";
 import { AuthContext } from "../../context/auth-context";
 
 const TrackPage = () => {
@@ -15,13 +17,37 @@ const TrackPage = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
+
+  const { currentUser } = useContext(AuthContext);
+
   const [formData, setFormData] = useState({
     comment : "",
     rating: ""
   })
 
-  const auth = useContext(AuthContext);
-  console.log(auth);
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // Handle form submission
+    Reviews.push({id: Reviews.length(), name: "John Doe", ...formData})
+  };
+  const handleAddToFavorites = () => {
+    const song: Song= {
+      songName: pageTrack.name,
+      artist: pageTrack.artist.name
+    }
+    addSongToFav(currentUser, song)
+      .then((response) => {
+        alert(response.message)
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -37,17 +63,6 @@ const TrackPage = () => {
     };
     fetchData();
   }, []);
-
-  const handleChange = (e ) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Handle form submission
-    Reviews.push({id: Reviews.length(), name: "John Doe", ...formData})
-  };
 
   return (
     <Container
@@ -92,6 +107,9 @@ const TrackPage = () => {
             <Typography variant="body2" sx={{ color: "text.secondary" }}>
               {pageTrack?.wiki.summary}
             </Typography>
+            <Button variant="contained" size="medium" onClick={handleAddToFavorites}>
+                      Añadir a favoritos
+            </Button>
           </CardContent>
         </Card>
       </Box>
