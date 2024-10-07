@@ -6,10 +6,14 @@ import {
   Button,
   Card,
   CardContent,
-  Grid,
+  CardMedia,
 } from "@mui/material";
+import Grid from "@mui/material/Grid2";
 import { AuthContext } from "../../context/auth-context";
-import { getUserData, editDescription } from "../../services/rest/users/usersApi";
+import {
+  getUserData,
+  editDescription,
+} from "../../services/rest/users/usersApi";
 import { Track } from "../../domain/entities/trackList";
 import { User } from "../../domain/models/user";
 import { getTrackInfo } from "../../services/tracks/getTrackInfo";
@@ -24,14 +28,21 @@ const ProfileScreen = () => {
     //Cargar los datos del usuario
     const fetchData = async () => {
       try {
-        const {user } = await getUserData(currentUser);
+        const { user } = await getUserData(currentUser);
         console.log(user);
         setUser(user);
         setFavList(user.favSongs);
-        FavList.forEach(async (track) => {
-          const trackInfo = await getTrackInfo(track.name, track.artist.name);
-          track.image = trackInfo.album.image;
-        });
+        
+        const tempImages: string[] = [];
+
+        for (const song of FavList) {
+          const trackInfo = await getTrackInfo(song.songName, song.artist);
+          const imageUrl = trackInfo.album.image[3]["#text"];
+          console.log(imageUrl);
+          tempImages.push(imageUrl); // Agregar la URL de la imagen al array temporal
+        }
+
+        setImages(tempImages); // Actualizar el estado de las imágenes
         console.log(FavList);
       } catch (error) {
         console.error(error);
@@ -66,7 +77,7 @@ const ProfileScreen = () => {
         position: "sticky",
       }}
     >
-      <Avatar  sx={{ width: 200, height: 200, mb: 2 }} />
+      <Avatar sx={{ width: 200, height: 200, mb: 2 }} />
       <Typography variant="h1">{user?.email}</Typography>
       <Typography
         variant="h3"
@@ -75,25 +86,38 @@ const ProfileScreen = () => {
       >
         {user?.desription}
       </Typography>
-      {/* Boton para editar la descripcion*/ }
-      <Button variant="contained" sx={{ mt: 2 }} onClick={handleEditDescription}>
+      {/* Boton para editar la descripcion*/}
+      <Button
+        variant="contained"
+        sx={{ mt: 2 }}
+        onClick={handleEditDescription}
+      >
         Editar Descripcion
       </Button>
       <Box sx={{ mt: 4, width: "100%" }}>
         <Typography variant="h4" sx={{ mb: 2 }}>
           Canciones Favoritas
         </Typography>
-        <Grid container spacing={2}>
+        <Grid 
+          container
+          spacing={{ xs: 2, md: 3 }}
+          columns={{ xs: 4, sm: 8, md: 16 }}
+        >
           {FavList.map((song, index) => (
-
-        <Grid item xs={12} sm={6} md={4} key={index}>
-          <Card>
-            <CardContent>
-          <Typography variant="h6">{song.songName}</Typography>
-          <Typography color="text.secondary">{song.artist}</Typography>
-            </CardContent>
-          </Card>
-        </Grid>
+            <Grid key={index} size={{ xs: 2, sm: 4, md: 4 }}>
+              <Card sx={{ width: "100%" }}>
+                <CardMedia
+                  component="img"
+                  height="140"
+                  image={images[index]}
+                  alt={song.songName}
+                />
+                <CardContent>
+                  <Typography variant="h6">{song.songName}</Typography>
+                  <Typography color="text.secondary">{song.artist}</Typography>
+                </CardContent>
+              </Card>
+            </Grid>
           ))}
         </Grid>
       </Box>

@@ -54,6 +54,7 @@ const ReviewsScreen = () => {
     .then((response) => {
       alert(response.message);
       setReviews(Reviews.filter((review) => review.song.songName !== song.songName));
+      setImages(images.filter((image) => image !== images[Reviews.findIndex((review) => review.song.songName === song.songName)]));
     })
     .catch((error) => {
       console.error(error);
@@ -79,7 +80,7 @@ const ReviewsScreen = () => {
         >
           {Reviews.map((review, index) => (
             <Grid key={index} size={{ xs: 2, sm: 4, md: 4 }}>
-              <Card sx={{ width: "100%" }} onClick={() => {}}>
+              <Card sx={{ width: "100%" }}>
                 <CardMedia
                   component="img"
                   height="140"
