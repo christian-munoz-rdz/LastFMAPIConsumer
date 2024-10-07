@@ -4,7 +4,9 @@ import { Song } from '../../../domain/models/song';
 // Obtener reviews de usuario => GET /reviews/:uid
 export const getReviews = async (userId: number) => {
     try {
-        const response = await restClient.get(`/reviews/${userId}`);
+        const response = await restClient.post('reviews/', {
+            userId
+        });
         return response.data;
     } catch (error) {
         throw new Error(error.response.data.message);

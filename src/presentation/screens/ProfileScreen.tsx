@@ -18,6 +18,7 @@ const ProfileScreen = () => {
   const { currentUser } = useContext(AuthContext);
   const [user, setUser] = useState<User | null>(null);
   const [FavList, setFavList] = useState<Track[]>([]);
+  const [images, setImages] = useState<string[]>([]);
 
   useEffect(() => {
     //Cargar los datos del usuario

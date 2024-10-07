@@ -3,11 +3,11 @@ import { useParams } from "react-router-dom";
 import { getTrackInfo } from "../../services/tracks/getTrackInfo";
 import { Track } from "../../domain/entities/trackInfo";
 import { Box, Container } from "@mui/system";
-import { Card, CardContent, Typography, Button, CircularProgress } from "@mui/material";
+import { Card, CardContent, Typography, Button } from "@mui/material";
 import { addSongToFav } from "../../services/rest/users/usersApi";
-import Reviews from "./Reviews";
 import { Song } from "../../domain/models/song";
 import { AuthContext } from "../../context/auth-context";
+import { createReview } from "../../services/rest/reviews/reviewsApi";
 
 const TrackPage = () => {
 
@@ -32,8 +32,17 @@ const TrackPage = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Handle form submission
-    Reviews.push({id: Reviews.length(), name: "John Doe", ...formData})
+    const song = {
+      songName: pageTrack?.name,
+      artist: pageTrack?.artist.name
+    }
+    createReview(currentUser, song, formData.comment, formData.rating)
+    .then((response) => {
+      alert(response.message)
+    })
+    .catch((error) => {
+      console.error(error);
+    });
   };
   const handleAddToFavorites = () => {
     const song: Song= {
