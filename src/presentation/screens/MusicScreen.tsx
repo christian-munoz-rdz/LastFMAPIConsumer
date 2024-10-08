@@ -94,12 +94,6 @@ const MusicScreen = () => {
         <CircularProgress />
       </Box>
     );
-  } else if (error) {
-    return (
-      <Typography variant="h1" gutterBottom>
-        {error}
-      </Typography>
-    );
   }
 
   return (

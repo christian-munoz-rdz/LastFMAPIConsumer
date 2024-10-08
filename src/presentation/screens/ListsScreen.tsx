@@ -109,12 +109,6 @@ const ListsScreen = () => {
     }
   };
 
-  // Función para abrir una playlist (implementación pendiente)
-  const handleOpenPlaylist = (playlist: Playlist) => {
-    // Aquí puedes implementar la lógica para abrir la playlist
-    // Por ejemplo, navegar a una página de detalles de la playlist
-  };
-
   return (
     <>
       <div style={{ maxWidth: "100%", alignItems: "center" }}>

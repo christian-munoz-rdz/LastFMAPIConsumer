@@ -76,12 +76,12 @@ const TrackPage = () => {
   return (
     <Container
       sx={{
-        minHeight: "100vh", // Para que ocupe todo el alto de la ventana
+        minHeight: "100vh", 
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
 
-        backgroundColor: "#121212", // Un color de fondo oscuro para mejor contraste
+        backgroundColor: "#121212", 
       }}
     >
       <Box

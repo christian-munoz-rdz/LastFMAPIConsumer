@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import {
   Box,
   Avatar,
@@ -14,7 +14,6 @@ import {
   getUserData,
   editDescription,
 } from "../../services/rest/users/usersApi";
-import { Track } from "../../domain/entities/trackList";
 import { User } from "../../domain/models/user";
 import { getTrackInfo } from "../../services/tracks/getTrackInfo";
 

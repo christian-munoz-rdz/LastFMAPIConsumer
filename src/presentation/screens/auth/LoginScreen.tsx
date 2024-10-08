@@ -36,27 +36,23 @@ const LoginScreen = () => {
     if (loginMode) {
       loginApi(email, password)
         .then((response) => {
-          // Handle successful login
           console.log("Login successful", response);
           handleUser(response.userId);
           console.log(currentUser);
           login();
         })
         .catch((error) => {
-          // Handle login error
           alert("Error: " + error.message);
         });
     } else {
       signup(email, password)
         .then((response) => {
-          // Handle successful signup
           console.log("Signup successful", response);
           handleUser(response.userId);
           console.log(currentUser);
           login();
         })
         .catch((error) => {
-          // Handle signup error
           alert("Error: " + error.message);
         });
     }
@@ -73,7 +69,7 @@ const LoginScreen = () => {
             mb: 1,
           }}
         >
-          <LockOutlined /> {/* Icono */}
+          <LockOutlined />
         </Avatar>
 
         <Typography component="h1" variant="h5" sx={{ textAlign: "center" }}>
