@@ -94,10 +94,12 @@ const TrackPage = () => {
       >
         <Card sx={{ maxWidth: "100%", height: "100%", padding: 1 }}>
           <CardContent>
-            <img
-              src={pageTrack?.album.image[3]["#text"]}
-              alt={pageTrack?.album.title}
-            />
+            {pageTrack?.album.image[3]["#text"] && (
+              <img
+                src={pageTrack.album.image[3]["#text"]}
+                alt={pageTrack.album.title}
+              />
+            )}
             <Typography gutterBottom variant="h2" component="div">
               {pageTrack?.name}
             </Typography>
@@ -165,22 +167,3 @@ const TrackPage = () => {
 };
 
 export default TrackPage;
-
-{
-  /* <div>
-{loading && <p>Loading...</p>}
-{error && <p>{error}</p>}
-{pageTrack && (
-    <div>
-        <img src={pageTrack.album.image[3]["#text"]} alt={pageTrack.album.title} />
-        <h1>{pageTrack.name}</h1>
-        <h2>{pageTrack.artist.name}</h2>
-        <h3>Album: {pageTrack.album.title}</h3>
-        <p>Reproducciones: {Number(pageTrack.playcount).toLocaleString()}</p>
-        <p> Tags: {pageTrack.toptags.tag.map((tag) => tag.name).join(", ")}</p>
-        <h3>Acerca de:</h3>
-        <p>{pageTrack.wiki.summary}</p>
-    </div>
-)}
-</div> */
-}

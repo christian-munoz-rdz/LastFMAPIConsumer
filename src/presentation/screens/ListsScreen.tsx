@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 
 import {
   Box,
@@ -154,13 +154,6 @@ const ListsScreen = () => {
                       </CardContent>
                     </Card>
                   ))}
-                  <Button
-                    sx={{ mt: 2 }}
-                    onClick={() => handleOpenPlaylist(playlist)}
-                    color="info"
-                  >
-                    Abrir
-                  </Button>
                   <Button
                     sx={{ mt: 2 }}
                     onClick={() => handleDeletePlaylist(playlist)}

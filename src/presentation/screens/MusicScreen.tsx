@@ -1,5 +1,4 @@
-import { useEffect, useState } from "react";
-
+import { useEffect, useState, useCallback } from "react";
 import {
   Box,
   Card,
@@ -10,7 +9,7 @@ import {
   CardActions,
   Button,
 } from "@mui/material";
-import Grid from "@mui/material/Grid2";
+import Grid from "@mui/material/Grid2"; 
 import { useNavigate } from "react-router-dom";
 import Grow from "@mui/material/Grow";
 import { Track } from "../../domain/entities/trackList";
@@ -22,38 +21,74 @@ const MusicScreen = () => {
 
   const [musicList, setMusicList] = useState<Track[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const [loadingMore, setLoadingMore] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [open, setOpen] = useState(false);
-  
-  const handleOpen = () => setOpen(true);
+  const [page, setPage] = useState<number>(1);
+  const [totalPages, setTotalPages] = useState<number>(Number.MAX_SAFE_INTEGER);
+  const [selectedTrack, setSelectedTrack] = useState<Track | null>(null);
+
+  const handleOpen = (track: Track) => {
+    setSelectedTrack(track);
+    setOpen(true);
+  };
   const handleClose = () => setOpen(false);
 
   const navigation = useNavigate();
+  const numberOfItems = 20; 
 
-  const numberOfItems = 100;
+  const fetchData = async (pageNumber: number) => {
+    try {
+      if (pageNumber === 1) {
+        setLoading(true);
+      } else {
+        setLoadingMore(true);
+      }
+  
+      const data = await getTopTracks(numberOfItems, pageNumber);
+      const tracks = data.tracks.track;
+      const attr = data.tracks["@attr"];
+      setTotalPages(parseInt(attr.totalPages));
+  
+      // Obtener imágenes de álbum para cada track
+      const tracksWithImages = await Promise.all(
+        tracks.map(async (track) => {
+          const trackInfo = await getTrackInfo(track.name, track.artist.name);
+          track.image = trackInfo.album?.image || track.image;
+          return track;
+        })
+      );
+  
+      setMusicList((prevMusicList) => [...prevMusicList, ...tracksWithImages]);
+    } catch (error) {
+      console.error(error);
+      setError("Error al cargar la información");
+    } finally {
+      setLoading(false);
+      setLoadingMore(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const tracks = await getTopTracks(numberOfItems);
+    fetchData(page);
+  }, [page]);
 
-        tracks.forEach(async (track) => {
-          const trackInfo = await getTrackInfo(track.name, track.artist.name);
-          track.image = trackInfo.album.image;
-        });
+  const handleScroll = useCallback(() => {
+    if (
+      window.innerHeight + window.scrollY >= document.body.offsetHeight - 500 &&
+      !loadingMore &&
+      page < totalPages
+    ) {
+      setPage((prevPage) => prevPage + 1);
+    }
+  }, [loadingMore, page, totalPages]);
 
-        setMusicList(tracks);
-      } catch (error) {
-        console.error(error);
-        setError("Error al cargar la información");
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchData();
-  }, []);
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [handleScroll]);
 
-  if (loading) {
+  if (loading && page === 1) {
     return (
       <Box>
         <CircularProgress />
@@ -70,7 +105,7 @@ const MusicScreen = () => {
   return (
     <>
       <Typography variant="h1" gutterBottom align="center">
-        Top {numberOfItems} canciones
+        Top canciones
       </Typography>
       <Box sx={{ flexGrow: 1, marginLeft: 3, marginRight: 3, marginBottom: 3 }}>
         <Grid
@@ -79,47 +114,55 @@ const MusicScreen = () => {
           columns={{ xs: 4, sm: 8, md: 16 }}
         >
           {musicList.map((track, index) => (
-            <Grid key={index} size={{ xs: 2, sm: 4, md: 4, xl:2 }}>
+            <Grid key={index} size={{ xs: 2, sm: 4, md: 4, xl: 2 }}>
               <Grow in={true}>
-                <Card
-                
-                  sx={{ width: "100%" }}
-                >
-                    <CardMedia
-                      component="img"
-                      height="140"
-                      image={track.image[3]["#text"]}
-                      alt="music card"
-                    />
-                    <CardContent>
-                      <Typography gutterBottom variant="h5" component="div">
-                        {track.name}
-                      </Typography>
-                      <Typography variant="h6" sx={{ color: "text.secondary" }}>
-                        {track.artist.name}
-                      </Typography>
-                      <Typography
-                        variant="body2"
-                        sx={{ color: "text.secondary" }}
-                      >
-                        {Number(track.playcount).toLocaleString()}{" "}
-                        reproducciones
-                      </Typography>
-                    </CardContent>
+                <Card sx={{ width: "100%" }}>
+                  <CardMedia
+                    component="img"
+                    height="140"
+                    image={track.image[3]["#text"] || "/placeholder.jpg"}
+                    alt="music card"
+                  />
+                  <CardContent>
+                    <Typography gutterBottom variant="h5" component="div">
+                      {track.name}
+                    </Typography>
+                    <Typography variant="h6" sx={{ color: "text.secondary" }}>
+                      {track.artist.name}
+                    </Typography>
+                    <Typography variant="body2" sx={{ color: "text.secondary" }}>
+                      {Number(track.playcount).toLocaleString()} reproducciones
+                    </Typography>
+                  </CardContent>
                   <CardActions>
-                    <Button size="medium" onClick={handleOpen}>Añadir a Lista</Button>
-                    <Button size="medium" onClick={() =>navigation(`/${track.artist.name}/${track.name}`)
-                  }>Reseñar</Button>
+                    <Button size="medium" onClick={() => handleOpen(track)}>
+                      Añadir a Lista
+                    </Button>
+                    <Button
+                      size="medium"
+                      onClick={() =>
+                        navigation(`/${track.artist.name}/${track.name}`)
+                      }
+                    >
+                      Reseñar
+                    </Button>
                   </CardActions>
                 </Card>
               </Grow>
             </Grid>
           ))}
         </Grid>
-        <CustomModal handleClose={handleClose} open={open}/>
+        {loadingMore && (
+          <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
+            <CircularProgress />
+          </Box>
+        )}
+        <CustomModal handleClose={handleClose} open={open} track={selectedTrack} />
       </Box>
     </>
   );
 };
 
 export default MusicScreen;
+
+
