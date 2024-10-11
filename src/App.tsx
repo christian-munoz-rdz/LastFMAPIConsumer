@@ -10,6 +10,7 @@ import ListsScreen from "./views/ListsScreen";
 import ProfileScreen from "./views/ProfileScreen";
 import TrackPage from "./views/TrackPage";
 import LoginScreen from "./views/LoginScreen";
+import SearchResultsScreen from "./views/SearchResultsScreen"; 
 
 const App = () => {
   
@@ -70,6 +71,7 @@ const App = () => {
         <Route path="/lists" element={<ListsScreen />} />
         <Route path="/profile" element={<ProfileScreen />} />
         <Route path="/:artist/:track" element={<TrackPage />} />
+        <Route path="/search" element={<SearchResultsScreen />} />
       </Routes>
     </AuthContext.Provider>
   );

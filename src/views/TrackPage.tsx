@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react";
 
 import { useParams } from "react-router-dom";
 import { Box, Container } from "@mui/system";
-import { Card, CardContent, Typography, Button, CircularProgress } from "@mui/material";
+import { Card, CardContent, Typography, Button, CircularProgress, Chip } from "@mui/material";
 
 import { AuthContext } from "../context/auth-context";
 import { useAlertMessage } from "../hooks/useAlertMessage";
@@ -126,10 +126,10 @@ const TrackPage = () => {
                 {Number(pageTrack?.playcount).toLocaleString()} reproducciones
               </Typography>
               <Typography variant="h6" color="text.secondary">
-                Tags: {pageTrack?.toptags.tag.map((tag) => tag.name).join(", ")}
+                Tags: {pageTrack?.toptags.tag.map((tag) => <Chip label={tag.name }variant="outlined" />)}
               </Typography>
               <Typography variant="body2" sx={{ color: "text.secondary" }}>
-                {pageTrack?.wiki.summary}
+                {pageTrack?.wiki? pageTrack?.wiki.summary : "No hay información disponible"}
               </Typography>
               <Button
                 variant="contained"

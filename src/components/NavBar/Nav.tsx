@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 
 import {
   AppBar,
@@ -28,6 +28,23 @@ const Nav = () => {
 
   const navigate = useNavigate();
 
+  // Estado para la búsqueda
+  const [searchQuery, setSearchQuery] = useState("");
+
+  // Manejar cambios en el input de búsqueda
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(e.target.value);
+  };
+
+  // Manejar la tecla Enter para iniciar la búsqueda
+  const handleSearchKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter' && searchQuery.trim() !== '') {
+      navigate(`/search?query=${encodeURIComponent(searchQuery.trim())}`);
+      setSearchQuery('');
+    }
+  };
+
+
   // * Métodos para manejar el menu
   const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -44,7 +61,11 @@ const Nav = () => {
           <Toolbar>
             {/* Componente de la Barra de Navegación 
             TODO: Manejar la lógica de las búsquedas */}
-            <SearchBar />
+            <SearchBar 
+              value={searchQuery}
+              onChange={handleSearchChange}
+              onKeyPress={handleSearchKeyPress}            
+            />
             {/* Botones de Navegación------------------------------------  */}
             <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "flex" } }}>
               {pages.map((page) => (
