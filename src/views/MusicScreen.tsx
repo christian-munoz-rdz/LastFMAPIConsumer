@@ -1,4 +1,5 @@
 import { useEffect, useState, useCallback } from "react";
+
 import {
   Box,
   Card,
@@ -12,9 +13,10 @@ import {
 import Grid from "@mui/material/Grid2"; 
 import { useNavigate } from "react-router-dom";
 import Grow from "@mui/material/Grow";
-import { Track } from "../../domain/entities/trackList";
-import { getTrackInfo } from "../../services/tracks/getTrackInfo";
-import { getTopTracks } from "../../services/charts/tracksChart";
+
+import { Track } from "../domain/entities/trackList";
+import { getTrackInfo } from "../services/tracks/getTrackInfo";
+import { getTopTracks } from "../services/charts/tracksChart";
 import CustomModal from "../components/SelectListModal/CustomModal";
 
 const MusicScreen = () => {

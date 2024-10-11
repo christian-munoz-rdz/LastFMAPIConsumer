@@ -15,17 +15,18 @@ import {
 import Grid from "@mui/material/Grid2";
 import MusicNoteIcon from "@mui/icons-material/MusicNote";
 
-import { AuthContext } from "../../context/auth-context";
-import { Playlist } from "../../domain/models/playlist";
-import { Song } from "../../domain/models/song";
+import { AuthContext } from "../context/auth-context";
+import { Playlist } from "../domain/models/playlist";
+import { Song } from "../domain/models/song";
 import {
   getPlaylists,
   createPlaylist,
   deletePlaylist,
   removeSongFromPlaylist,
-} from "../../services/rest/playlists/playlistsApi";
+} from "../services/rest/playlists/playlistsApi";
 
 const ListsScreen = () => {
+  
   const { currentUser } = useContext(AuthContext);
 
   const [playlists, setPlaylists] = useState<Playlist[]>([]);
@@ -34,12 +35,11 @@ const ListsScreen = () => {
   const [newPlaylistDescription, setNewPlaylistDescription] = useState("");
   const [newPlaylistSongs, setNewPlaylistSongs] = useState<Song[]>([]);
 
-  // Cargar las playlists del usuario
+  //* Cargar las playlists del usuario
   useEffect(() => {
     const fetchData = async () => {
       try {
         const { playlists } = await getPlaylists(currentUser);
-        console.log(playlists);
         setPlaylists(playlists);
       } catch (error) {
         console.error(error);
@@ -48,12 +48,12 @@ const ListsScreen = () => {
     fetchData();
   }, [currentUser]);
 
-  // Función para abrir el diálogo de creación de playlist
+  //! Función para abrir el diálogo de creación de playlist
   const handleCreatePlaylist = () => {
     setIsCreateDialogOpen(true);
   };
 
-  // Función para enviar los datos de la nueva playlist
+  //! Función para enviar los datos de la nueva playlist
   const handleCreatePlaylistSubmit = async () => {
     try {
       await createPlaylist(
@@ -75,7 +75,7 @@ const ListsScreen = () => {
     }
   };
 
-  // Función para eliminar una canción de una playlist
+  //* Función para eliminar una canción de una playlist
   const handleDeleteSong = async (playlist: Playlist, song: Song) => {
     try {
       await removeSongFromPlaylist(currentUser, playlist.playlistName, song);
@@ -98,7 +98,7 @@ const ListsScreen = () => {
     }
   };
 
-  // Función para eliminar una playlist
+  //* Función para eliminar una playlist
   const handleDeletePlaylist = async (playlist: Playlist) => {
     try {
       await deletePlaylist(currentUser, playlist.playlistName);
@@ -140,7 +140,7 @@ const ListsScreen = () => {
                         <Typography variant="body1">{song.songName}</Typography>
                         <Typography variant="body2">{song.artist}</Typography>
                         <Button
-                          color="error"
+                          color="warning"
                           onClick={() => handleDeleteSong(playlist, song)}
                         >
                           Eliminar Cancion

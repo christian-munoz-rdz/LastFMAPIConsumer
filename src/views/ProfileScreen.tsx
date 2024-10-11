@@ -1,4 +1,5 @@
 import { useContext, useEffect, useState } from "react";
+
 import {
   Box,
   Avatar,
@@ -7,20 +8,31 @@ import {
   Card,
   CardContent,
   CardMedia,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  TextField,
+  DialogActions,
 } from "@mui/material";
 import Grid from "@mui/material/Grid2";
-import { AuthContext } from "../../context/auth-context";
+
+import { AuthContext } from "../context/auth-context";
 import {
   getUserData,
   editDescription,
-} from "../../services/rest/users/usersApi";
-import { User } from "../../domain/models/user";
-import { getTrackInfo } from "../../services/tracks/getTrackInfo";
+} from "../services/rest/users/usersApi";
+import { User } from "../domain/models/user";
+import { getTrackInfo } from "../services/tracks/getTrackInfo";
 
 const ProfileScreen = () => {
+  
   const { currentUser } = useContext(AuthContext);
+
   const [user, setUser] = useState<User | null>(null);
   const [images, setImages] = useState<string[]>([]);
+  
+  const [newDescription, setNewDescription ] = useState("");
+  const [isCreateDialogOpen, setIsCreateDialogOpen ] = useState(false);
 
   useEffect(() => {
     //Cargar los datos del usuario
@@ -47,12 +59,12 @@ const ProfileScreen = () => {
   }, []);
 
   const handleEditDescription = () => {
-    const newDescription = prompt("Ingrese la nueva descripcion");
     if (newDescription) {
       editDescription(currentUser, newDescription)
         .then((response) => {
-          console.log(response);
           setUser({ ...user, desription: newDescription });
+          setIsCreateDialogOpen(false);
+          setNewDescription("");
         })
         .catch((error) => {
           console.error(error);
@@ -61,6 +73,7 @@ const ProfileScreen = () => {
   };
 
   return (
+    <>
     <Box
       sx={{
         display: "flex",
@@ -85,7 +98,7 @@ const ProfileScreen = () => {
       <Button
         variant="contained"
         sx={{ mt: 2 }}
-        onClick={handleEditDescription}
+        onClick={() => setIsCreateDialogOpen(true)}
       >
         Editar Descripcion
       </Button>
@@ -117,6 +130,35 @@ const ProfileScreen = () => {
         </Grid>
       </Box>
     </Box>
+
+      {/* Diálogo para editar descripción */}
+      <Dialog
+        open={isCreateDialogOpen}
+        onClose={() => setIsCreateDialogOpen(false)}
+      >
+        <DialogTitle>Editar descripción</DialogTitle>
+        <DialogContent>
+          <TextField
+            autoFocus
+            margin="dense"
+            label="Nueva Descripción"
+            type="text"
+            fullWidth
+            value={ newDescription }
+            onChange={(e) => setNewDescription(e.target.value)}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setIsCreateDialogOpen(false)} color="error">
+            Cancelar
+          </Button>
+          <Button onClick={handleEditDescription} color="primary">
+            Cambiar
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+    </>
   );
 };
 

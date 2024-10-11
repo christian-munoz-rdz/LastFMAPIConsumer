@@ -1,16 +1,18 @@
 import { useCallback, useState, useEffect } from "react";
+
 import { Routes, Route, useNavigate } from "react-router-dom";
 
-import Nav from "./presentation/components/NavBar/Nav";
-import MusicScreen from "./presentation/screens/MusicScreen";
-import ReviewsScreen from "./presentation/screens/ReviewsScreen";
-import ListsScreen from "./presentation/screens/ListsScreen";
-import ProfileScreen from "./presentation/screens/ProfileScreen";
-import TrackPage from "./presentation/screens/TrackPage";
-import LoginScreen from "./presentation/screens/auth/LoginScreen";
 import { AuthContext } from "./context/auth-context";
+import Nav from "./components/NavBar/Nav";
+import MusicScreen from "./views/MusicScreen";
+import ReviewsScreen from "./views/ReviewsScreen";
+import ListsScreen from "./views/ListsScreen";
+import ProfileScreen from "./views/ProfileScreen";
+import TrackPage from "./views/TrackPage";
+import LoginScreen from "./views/LoginScreen";
 
 const App = () => {
+  
   const navigate = useNavigate();
 
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(() => {

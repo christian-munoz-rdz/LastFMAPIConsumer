@@ -1,11 +1,10 @@
 import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import Logout from "@mui/icons-material/Logout";
-
 import { Menu, MenuItem, Divider } from "@mui/material";
 import Avatar from "@mui/material/Avatar";
 
-import { AuthContext } from "../../../context/auth-context";
+import { AuthContext } from "../../context/auth-context";
 
 // * Props
 interface DropdownMenuProps {

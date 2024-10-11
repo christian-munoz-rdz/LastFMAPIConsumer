@@ -1,3 +1,5 @@
+import { useContext, useEffect, useState } from "react";
+
 import {
   Box,
   Button,
@@ -9,25 +11,31 @@ import {
 } from "@mui/material";
 import Grid from "@mui/material/Grid2";
 
-import { useContext, useEffect, useState } from "react";
-import { AuthContext } from "../../context/auth-context";
-import { deleteReview, getReviews } from "../../services/rest/reviews/reviewsApi";
-import { Review } from "../../domain/models/review";
-import { Song } from "../../domain/models/song";
-import { getTrackInfo } from '../../services/tracks/getTrackInfo';
+import { AuthContext } from "../context/auth-context";
+import { deleteReview, getReviews } from "../services/rest/reviews/reviewsApi";
+import { Review } from "../domain/models/review";
+import { Song } from "../domain/models/song";
+import { getTrackInfo } from '../services/tracks/getTrackInfo';
+import { useAlertMessage } from "../hooks/useAlertMessage";
 
 const ReviewsScreen = () => {
 
+  const { currentUser } = useContext(AuthContext);
+
   const [Reviews, setReviews] = useState<Review[]>([]);
-  const {currentUser } = useContext(AuthContext);
   const [images, setImages] = useState<string[]>([]);
+
+  const {
+    AlertMessage,
+    changeAlertMessage,
+    openAlert,
+  } = useAlertMessage();
 
   //Cargar reviews del usuario
   useEffect(()=>{
     const fetchData = async () => {
       try {
         const {reviews} = await getReviews(currentUser);
-        console.log(reviews);
         setReviews(reviews);
 
         const tempImages: string[] = [];
@@ -35,11 +43,9 @@ const ReviewsScreen = () => {
         for (const review of reviews) {
           const trackInfo = await getTrackInfo(review.song.songName, review.song.artist);
           const imageUrl = trackInfo.album.image[3]["#text"];
-          console.log(imageUrl);
           tempImages.push(imageUrl); // Agregar la URL de la imagen al array temporal
         }
         setImages(tempImages); // Actualizar el estado de las imágenes
-        console.log(tempImages);
       }
       catch (error) {
         console.error(error);
@@ -52,7 +58,8 @@ const ReviewsScreen = () => {
     event.preventDefault();
     deleteReview(currentUser, song)
     .then((response) => {
-      alert(response.message);
+      changeAlertMessage("Notificación", response.message);
+      openAlert();
       setReviews(Reviews.filter((review) => review.song.songName !== song.songName));
       setImages(images.filter((image) => image !== images[Reviews.findIndex((review) => review.song.songName === song.songName)]));
     })
@@ -62,6 +69,7 @@ const ReviewsScreen = () => {
   }
 
   return (
+    <>
     <div>
       <Typography
         variant="h1"
@@ -106,6 +114,8 @@ const ReviewsScreen = () => {
         </Grid>
       </Box>
     </div>
+    <AlertMessage />
+    </>
   );
 };
 

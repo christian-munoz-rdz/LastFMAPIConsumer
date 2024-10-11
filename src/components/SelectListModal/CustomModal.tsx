@@ -1,16 +1,18 @@
 import { useEffect, useState, useContext } from "react";
+
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import { Button } from "@mui/material";
+
 import CustomList from "./CustomList";
-import { Track } from "../../../domain/entities/trackList";
-import { Playlist } from "../../../domain/models/playlist";
-import { AuthContext } from "../../../context/auth-context";
+import { Track } from "../../domain/entities/trackList";
+import { Playlist } from "../../domain/models/playlist";
+import { AuthContext } from "../../context/auth-context";
 import {
   getPlaylists,
   addSongToPlaylist,
-} from "../../../services/rest/playlists/playlistsApi";
+} from "../../services/rest/playlists/playlistsApi";
 
 interface CustomModalProps {
   open: boolean;
