@@ -21,7 +21,7 @@ export const getSearchResults = async (
     const response = await apiClient.get<TrackSearchResponse>(
       `?method=track.search&track=${encodeURIComponent(
         trackName
-      )}&page=${page}&limit=${limit}&api_key=6d6bb686ec391a90c1c9c8601634924a&format=json`
+      )}&page=${page}&limit=${limit}&api_key=MY_KEY&format=json`
     );
     return response.data.results;
 };
